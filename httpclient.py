@@ -78,9 +78,9 @@ class HTTPClient(object):
 
         port = parsed_url.port
         # if port is not given, use scheme to give port number
-        if not port and scheme == "http":
+        if  port == None and scheme == "http":
             port = 80
-        elif not port and scheme == "https":
+        elif port == None and scheme == "https":
             port = 443
         self.connect(host, port)
         
@@ -97,6 +97,8 @@ class HTTPClient(object):
         response = self.recvall(self.socket)
         code = self.get_code(response)
         body = self.get_body(response)
+        #print('code:',code)
+        #print('body:',body)
 
         self.close()
         return HTTPResponse(code, body)
@@ -112,9 +114,9 @@ class HTTPClient(object):
 
         port = parsed_url.port
         # if port is not given, use scheme to give port number
-        if not port and scheme == "http":
+        if port == None and scheme == "http":
             port = 80
-        elif not port and scheme == "https":
+        elif port == None and scheme == "https":
             port = 443
         self.connect(host, port)
         
@@ -129,13 +131,15 @@ class HTTPClient(object):
         else:
             arguments = urllib.parse.urlencode(args)
         
-        request= """POST {} HTTP/1.1\r\nHost: {}\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: {}\r\n\Connection: close\r\n\r\n{}""".format(path,host,str(len(arguments)),arguments)
+        request="""POST {} HTTP/1.1\r\nHost: {}\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}""".format(path,host,str(len(arguments)),arguments)
         print(request)
         self.sendall(request)
 
         response = self.recvall(self.socket)
         code = self.get_code(response)
         body = self.get_body(response)
+        #print('code:',code)
+        #print('body:',body)
 
         self.close()
         return HTTPResponse(code, body)
